@@ -20,7 +20,7 @@
         width: 100vw;
         
         display: grid;
-        grid-template-rows: 20% 50% 20%;
+        grid-template-rows: 20% 50% 30%;
     }
 
     .box{
@@ -98,6 +98,45 @@
         outline: none;
     }
 
+    footer{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(171, 128, 190);
+    }
+
+    .form_c{
+        /* border: 1px solid black; */
+        width: 300px;
+        margin-top: 15px;
+        height: 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .alarm{
+        height: 90%;
+        width: 60%;
+        font-size: 36px;
+        border: none;
+        outline: none;
+        border-radius: 30px;
+        color: white;
+        background-color: rgb(248, 52, 189);
+    } 
+
+    .a_b{
+        height: 90%;
+        width: 30%;
+        font-size: 20px;
+        border: none;
+        outline: none;
+        border-radius: 30px;
+        color: white;
+        background-color: rgb(248, 52, 189);
+    }
+
+
 </style>
 
 <body>
@@ -119,8 +158,11 @@
                 <h2 style="margin: 3px; font-size: 38px;font-weight: bold;font-family:cursive;color: rgb(160, 0, 160); " class="area" >last</h2>
             </div>
         </section>
-        <footer class="box">
-            <h2>this is foot</h2>
+        <footer class="box" style="" >
+            <form action="" method="GET" class="form_c">
+                <input type="time" name="time" class="alarm">
+                <input type="submit" name="" id="" value="set alarm" class="a_b" >
+            </form>
         </footer>
     </div>
 </body>
