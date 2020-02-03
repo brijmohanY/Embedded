@@ -1,13 +1,15 @@
-
 String request;
 int current_status_LED;
 int motor_clock;
 int motor_anti_clock;
-const long utcOffsetInSeconds =19800 ;
+const long utcOffsetInSeconds = 19800;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 String last;
 String led_switch_color;
 int pir_status;
+String s = "led-on";
+String motor_c = "c-on";
+String motor_ac = "ac-on";
 
 
 #include <WiFiClient.h>
@@ -18,8 +20,8 @@ int pir_status;
 #include <ESP8266mDNS.h>
 
 
-#define ssid "Harshit"
-#define pass "Harshit26"
+#define ssid "kamal pc"
+#define pass "123456789"
 WiFiServer server(80);
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
@@ -212,13 +214,22 @@ String prepareHtmlPage()
 "        </header >\n"
 "        <section class=\"box\">\n"
 "            <div class=\"switches\">\n"
-"                <a href=\"LED\" ><input class=\"leds\" type=\"button\" value=\"Led1\" style=\"background-color:"+ led_switch_color+ ";\" ></a>\n"+
-"                <a href=\"MOTOR_CLOCKWISE\" ><input class=\"leds\" type=\"button\" value=\"MOTOR_CLOCKWISE\"></a>\n"
-"                <a href=\"MOTOR_ANTI_CLOCKWISE\" ><input class=\"leds\" type=\"button\" value=\"MOTOR_ANTI_CLOCKWISE\"></a>\n"
+"<a href=\"\n"
++ s +
+"\">"
+"<input class=\"leds\" type=\"button\" value=\"Led1\" style=\"background-color:"+ led_switch_color+ ";\" ></a>\n"+
+"<a href=\"\n"
++ motor_c +
+"\">"
+"<input class=\"leds\" type=\"button\" value=\"MOTOR_CLOCKWISE\"></a>\n"
+"<a href=\"\n"
++ motor_ac +
+"\">"
+"<input class=\"leds\" type=\"button\" value=\"MOTOR_ANTI_CLOCKWISE\"></a>\n"
 "                \n"
 "            </div>\n"
 "            <div class=\"status\">\n"
-"                 <h2 style=\"font-size: 38px;font-weight: bold;font-family:cursive;color: rgb(160, 0, 160);\" class=\"time\">\n"+ daysOfTheWeek[timeClient.getDay()]+ " " +timeClient.getHours()+":"+ timeClient.getMinutes()+":" + timeClient.getSeconds() +"</h2>\n"+
+"                 <h2 style=\"font-size: 38px;font-weight: bold;font-family:cursive;color: rgb(160, 0, 160);\" class=\"time\">\n"+ daysOfTheWeek[timeClient.getDay()] + " " + timeClient.getHours()+":"+ timeClient.getMinutes( ) +":" + timeClient.getSeconds() +"</h2>\n"+
 "                 <h2 style=\"margin: 3px; font-size: 38px;font-weight: bold;font-family:cursive;color: rgb(160, 0, 160);\" class=\"area\">\n"+ last +"</h2>\n"+
 "            </div>\n"
 "        </section>\n"
@@ -254,53 +265,58 @@ void loop() {
   motor_clock= digitalRead(D1);
   motor_anti_clock= digitalRead(D2);
   
-  if(current_status_LED==0 && request.indexOf("/LED")!= -1)
+  if(current_status_LED==0 && request.indexOf("/led-on")!= -1)
   {
     digitalWrite(D0,1);
     last = "D0 is high";
     led_switch_color = "green";
+    s = "led-off";
     Serial.println(last );
   }
-  else if (current_status_LED==1 && request.indexOf("/LED")!= -1)
+  else if (current_status_LED==1 && request.indexOf("/led-off")!= -1)
   {
     digitalWrite(D0,0);
     last="D0 is low";
     led_switch_color = "red";
+    s = "led-on"; 
     Serial.println(last );
   }
-  if(motor_clock==0 && request.indexOf("/MOTOR_CLOCKWISE")!= -1)
+  if(motor_clock==0 && request.indexOf("/c-on")!= -1)
   {
     digitalWrite(D1,1);
     digitalWrite(D2,0);
-    last="Motor is clockwise direction";
+    motor_c = "c-off";
+    last="motor is on in c";
    
     //Serial.println("D1 is high" );
     Serial.println(last);
     
   }
-  else if (motor_clock==1 && request.indexOf("/MOTOR_CLOCKWISE")!= -1)
+  else if (motor_clock==1 && request.indexOf("/c-off")!= -1)
   {
     digitalWrite(D1,0);
     digitalWrite(D2,0);
     last="Motor is oFF";
-    
+    motor_c = "c-on";
     Serial.println(last);
     //Serial.println("D1 is low" );
   }
-  if(motor_anti_clock==0 && request.indexOf("/MOTOR_ANTI_CLOCKWISE")!= -1)
+  if(motor_anti_clock==0 && request.indexOf("/ac-on")!= -1)
   {
     digitalWrite(D2,1);
     digitalWrite(D1,0);
     //Serial.println("D1 is high" );
     last="Motor is anticlockwise direction";
+    motor_ac = "ac-off";
     Serial.println(last);
     
   }
-  else if (motor_anti_clock==1 && request.indexOf("/MOTOR_ANTI_CLOCKWISE")!= -1)
+  else if (motor_anti_clock==1 && request.indexOf("/ac-off")!= -1)
   {
     digitalWrite(D2,0);
     digitalWrite(D1,0);
     last="Motor is off";
+    motor_ac = "ac-on";
     Serial.println(last);
     //Serial.println("D1 is low" );
   }
